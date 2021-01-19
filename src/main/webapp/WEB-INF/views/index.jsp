@@ -8,5 +8,8 @@
 <body>
 <h2>hello!???</h2>
 <h2>${total }</h2>
+<c:forEach var='month' items = "${month }" varStatus = 'status'>
+	<h2>${month.amount }</h2>
+</c:forEach>
 </body>
 </html>
