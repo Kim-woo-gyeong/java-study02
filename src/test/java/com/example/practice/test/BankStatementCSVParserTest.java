@@ -13,7 +13,7 @@ import com.example.practice.controller.BankTransaction;
 
 public class BankStatementCSVParserTest {
 	private final BankStatementParser statementParser = new BankStatementCSVParser();
-	
+	  
 	@Test
 	public void shouldParseOneCorrectLine() throws Exception{
 //		Assert.fail("Not Yet implemented");
