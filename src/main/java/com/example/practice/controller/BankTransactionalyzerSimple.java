@@ -29,12 +29,11 @@ public class BankTransactionalyzerSimple {
 		final Path path = Paths.get(RESOURCES2 + "bank-data-simple.csv");
 		final List<String> lines = Files.readAllLines(path);
 		
-		final List<BankTransaction> bankTransactions = bankStatementParser.parseLinesFromCSV(lines);
+		final List<BankTransaction> bankTransactions = bankStatementParser.parseLinesFrom(lines);
 		double totalAmount = calculateTotalAmount(bankTransactions);
 		List<BankTransaction> selectMonth = selectMonth(bankTransactions, Month.JANUARY);
 		
 		model.addAttribute("total", totalAmount);
-		System.err.println(selectMonth);
 		model.addAttribute("month", selectMonth);
 		
 		return "index";
