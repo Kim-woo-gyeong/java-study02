@@ -1,7 +1,11 @@
 package com.example.practice.controller;
 
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
+
+import com.example.practice.Interface.BankTransactionFilter;
+import com.example.practice.Interface.BankTransactionSummarizer;
 
 public class BankStatementProcessor {
 	private final List<BankTransaction> bankTransactions;
@@ -10,7 +14,17 @@ public class BankStatementProcessor {
 		this.bankTransactions = bankTransactions;
 	}
 	
-	public double calculateTotalAmount() {
+	public double summarizeTransactions(final BankTransactionSummarizer bankTransactionSummarizer) {
+		double result = 0;
+		
+		for(final BankTransaction bankTransaction : bankTransactions) {
+			result = bankTransactionSummarizer.summarize(result, bankTransaction);
+		}
+		
+		return result;
+	}
+	
+	public double calculateTotalAmount() { // 총합
 		double total = 0;
 		
 		for(final BankTransaction bankTransaction : bankTransactions) {
@@ -20,18 +34,21 @@ public class BankStatementProcessor {
 		return total;
 	}
 	
-	public double calculateTotalInMonth(final Month month) {
-		double total = 0;
-		for(final BankTransaction bankTransaction : bankTransactions) {
-			if(bankTransaction.getDate().getMonth() == month) {
-				total += bankTransaction.getAmount();
-			}
-		}
+	public double calculateTotalInMonth(final Month month) { //해당 월
+//		double total = 0;
+//		for(final BankTransaction bankTransaction : bankTransactions) {
+//			if(bankTransaction.getDate().getMonth() == month) {
+//				total += bankTransaction.getAmount();
+//			}
+//		}
+//		
+//		return total;
 		
-		return total;
+		return summarizeTransactions((acc, bankTransaction) -> 
+			bankTransaction.getDate().getMonth() == month ? acc + bankTransaction.getAmount() : acc);
 	}
 	
-	public double calculateTotalForCategory(final String category) {
+	public double calculateTotalForCategory(final String category) { //카테고리별
 		double total = 0;
 		
 		for(final BankTransaction bankTransaction : bankTransactions) {
@@ -42,4 +59,32 @@ public class BankStatementProcessor {
 		
 		return total;
 	}
+	
+	public List<BankTransaction> findTransations(final BankTransactionFilter bankTransactionFilter){
+//		final List<BankTransaction> result = new ArrayList<>();
+//		
+//		for(final BankTransaction bankTransaction : bankTransactions) {
+//			if(bankTransactionFilter.test(bankTransaction)) {
+//				result.add(bankTransaction);
+//			}
+//		}
+//		
+//		return result;
+		final List<BankTransaction> result = new ArrayList<>();
+		
+		for(final BankTransaction bankTransaction : bankTransactions) {
+			if(bankTransactionFilter.test(bankTransaction)) {
+				result.add(bankTransaction);
+			}
+		}
+		
+		return bankTransactions;
+	}
+	
+	public List<BankTransaction> findTransactionGreaterThanEqual(final int amount) {
+		return findTransations(bankTransaction -> bankTransaction.getAmount() >= amount);
+	}
+		
+	
+	
 }

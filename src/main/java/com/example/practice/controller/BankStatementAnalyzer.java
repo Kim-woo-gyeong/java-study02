@@ -35,7 +35,7 @@ public class BankStatementAnalyzer {
 		
 		final List<BankTransaction> bankTransactions = bankStatementParser.parseLinesFrom(lines); // 엑셀파일 읽기
 		final BankStatementProcessor bankStatementProcessor = new BankStatementProcessor(bankTransactions); // 읽은 데이터 담기
-		
+
 		collectSummary(bankStatementProcessor);
 
 	}
@@ -50,5 +50,9 @@ public class BankStatementAnalyzer {
                 + bankStatementProcessor.calculateTotalInMonth(Month.FEBRUARY));
         System.out.println("The total salary received is "
                 + bankStatementProcessor.calculateTotalForCategory("Salary"));
+        
+        final List<BankTransaction> transactions = bankStatementProcessor.findTransations(
+        			bankTransaction -> bankTransaction.getDate().getMonth() == Month.FEBRUARY 
+        			&& bankTransaction.getAmount() >= 1000);
     }
 }
